@@ -64,9 +64,9 @@ export default function Signin() {
                     <div className='userInfo' style={{ marginTop: 16 }}>
                         <img src={user.photoURL} alt={user.name} style={{width: 48, borderRadius: '50%' }}/>
                         <div>
-                            
+
                             <p>
-                                <strong>{user.nome}</strong>
+                                <strong>{user.name}</strong>
                             </p>
                             <p style={{ fontSize: 12 }}>{user.email}</p>
 
