@@ -1,8 +1,36 @@
 import './Signin.css';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa6";
+import { useState } from 'react';
+import { signInWithGooglePopup } from '../../firebase';
+
 
 export default function Signin() {
+    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState(null);
+
+    async function handleGoogleSigIn() {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const userObj = await signInWithGooglePopup();
+            setUser ({
+                name: userObj.displayName,
+                email: userObj.email,
+                photoURL: userObj.photoURL,
+                uid: userObj.uid
+            })
+            console.log('Usuário logado', userObj);
+        }catch (err) {
+            console.log('Erro ao logar com o Google', err);
+            setError(err.message || 'Erro no login');
+        }finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className='container'>
             <div className='card'>
@@ -10,7 +38,7 @@ export default function Signin() {
                 <p>Acesse e aproveite um experiência segura dentro da GMX</p>
 
                 <div className='socialLogin'>
-                    <button className='google'>
+                    <button className='google' onClick={handleGoogleSigIn} disabled={loading} arial-label='Entrar com Google'>
                         <FcGoogle size={24}/>
                     </button>
                     <button className='facebook'>
@@ -29,6 +57,22 @@ export default function Signin() {
 
                 <p className='register'>Não tem um conta? <a href='/signup'>Cadastre-se</a>
                 </p>
+
+                {error && <p style={{color: 'red', marginTop: 12 }}>{error}</p>}
+
+                {user && (
+                    <div className='userInfo' style={{ marginTop: 16 }}>
+                        <img src={user.photoURL} alt={user.name} style={{width: 48, borderRadius: '50%' }}/>
+                        <div>
+                            
+                            <p>
+                                <strong>{user.nome}</strong>
+                            </p>
+                            <p style={{ fontSize: 12 }}>{user.email}</p>
+
+                        </div>
+                    </div>
+                )}
             </div>
 
             <p className='terms'>
