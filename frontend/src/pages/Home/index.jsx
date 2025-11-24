@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom'
-import Categories from '../../components/Categories'
-import './Home.css'
+import { Link } from 'react-router-dom';
+import Categories from '../../components/Categories';
+import './Home.css';
+import Card from '../../components/Card/';
 import { useEffect, useState } from 'react'
+import { getProducts } from '../../services/productService'
 
 export default function Page() {
     const [selectedBtn, setSelectedBtn] = useState('');
     const [products, setProducts] = useState([]);
 
-
+    //Carregar os produtos ao iniciar
     useEffect(() => {
         async function loadProducts() {
             const data = await getProducts();
